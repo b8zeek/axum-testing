@@ -1,0 +1,10 @@
+[package]
+name = 'rust_axum'
+version = "0.1.0"
+edition = '2021'
+
+[dependencies]
+tokio = { version = "1.35.1", features = ["full"] }
+
+[dev-dependencies]
+anyhow = '1'
