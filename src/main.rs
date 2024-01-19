@@ -1,4 +1,5 @@
-use axum::{Router, response::{Html, IntoResponse}, routing::get};
+use axum::{Router, response::{Html, IntoResponse}, routing::get, extract::Query};
+use serde::Deserialize;
 
 #[tokio::main]
 async fn main() {
@@ -16,8 +17,14 @@ async fn main() {
   axum::serve(listener, routes_hello).await.unwrap();
 }
 
-async fn handler_hello() -> impl IntoResponse {
-  print!("--> {:<12} - handler_hello", "HANDLER");
+#[derive(Debug, Deserialize)]  
+struct HelloParams {
+  name: Option<String>
+}
 
-  Html("Hello <strong>World</strong>!")
+async fn handler_hello(Query(params): Query<HelloParams>) -> impl IntoResponse {
+  print!("--> {:<12} - handler_hello - {params:?}", "HANDLER");
+
+  let name = params.name.as_deref().unwrap_or("World!");
+  Html(format!("Hello <strong>{name}</strong>!"))
 }
