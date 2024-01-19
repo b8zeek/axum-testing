@@ -4,7 +4,7 @@ use axum::{Router, response::Html, routing::get};
 async fn main() {
   let routes_hello = Router::new().route(
     "/hello",
-    get(|| async { Html("<h1>Hello, world BREEE!</h1>")})
+    get(|| async { Html("<h1>Hello, world BREEEZ!</h1>")})
   );
 
   let address = "127.0.0.1:8080";
