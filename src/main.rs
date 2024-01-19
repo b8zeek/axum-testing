@@ -1,10 +1,10 @@
-use axum::{Router, response::Html, routing::get};
+use axum::{Router, response::{Html, IntoResponse}, routing::get};
 
 #[tokio::main]
 async fn main() {
   let routes_hello = Router::new().route(
     "/hello",
-    get(|| async { Html("<h1>Hello, world BREEEZ!</h1>")})
+    get(handler_hello)
   );
 
   let address = "127.0.0.1:8080";
@@ -14,4 +14,10 @@ async fn main() {
   println!("--> LISTENING on {address}...");
 
   axum::serve(listener, routes_hello).await.unwrap();
+}
+
+async fn handler_hello() -> impl IntoResponse {
+  print!("--> {:<12} - handler_hello", "HANDLER");
+
+  Html("Hello <strong>World</strong>!")
 }
