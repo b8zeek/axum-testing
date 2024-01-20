@@ -1,3 +1,5 @@
+pub use self::error::{Error, Result};
+
 use axum::{
     extract::{Path, Query},
     response::{Html, IntoResponse},
@@ -6,6 +8,8 @@ use axum::{
 };
 use serde::Deserialize;
 use tower_http::services::ServeDir;
+
+mod error;
 
 #[tokio::main]
 async fn main() {
