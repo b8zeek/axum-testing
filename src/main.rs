@@ -10,11 +10,13 @@ use serde::Deserialize;
 use tower_http::services::ServeDir;
 
 mod error;
+mod web;
 
 #[tokio::main]
 async fn main() {
     let routes_all = Router::new()
         .merge(routes_hello())
+        .merge(web::routes_login::routes())
         .fallback_service(routes_static());
 
     let address = "127.0.0.1:8080";
