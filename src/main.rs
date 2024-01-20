@@ -1,11 +1,15 @@
-use axum::{Router, response::{Html, IntoResponse}, routing::get, extract::Query};
+use axum::{Router, response::{Html, IntoResponse}, routing::get, extract::{Query, Path}};
 use serde::Deserialize;
 
 #[tokio::main]
 async fn main() {
-  let routes_hello = Router::new().route(
+  let routes_hello = Router::new()
+  .route(
     "/hello",
     get(handler_hello)
+  ).route(
+    "/hello/:name",
+    get(handler_hello2)
   );
 
   let address = "127.0.0.1:8080";
@@ -27,4 +31,10 @@ async fn handler_hello(Query(params): Query<HelloParams>) -> impl IntoResponse {
 
   let name = params.name.as_deref().unwrap_or("World!");
   Html(format!("Hello <strong>{name}</strong>!"))
+}
+
+async fn handler_hello2(Path(name): Path<String>) -> impl IntoResponse {
+  print!("--> {:<12} - handler_hello2 - {name:?}", "HANDLER");
+
+  Html(format!("Hello2 <strong>{name}</strong>!"))
 }
