@@ -16,10 +16,13 @@ mod model;
 mod web;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<()> {
+    let mc = model::ModelController::new().await?;
+
     let routes_all = Router::new()
         .merge(routes_hello())
         .merge(web::routes_login::routes())
+        .nest("/api", web::routes_tickets::routes(mc.clone()))
         // .layer(map_response(main_response_mapper))
         .layer(CookieManagerLayer::new())
         .fallback_service(routes_static());
@@ -31,6 +34,8 @@ async fn main() {
     println!("--> LISTENING on {address}...");
 
     axum::serve(listener, routes_all).await.unwrap();
+
+    Ok(())
 }
 
 fn main_response_mapper(res: Response) -> Response {
